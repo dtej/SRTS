@@ -1,0 +1,86 @@
+//Create a user
+POST http://localhost:5000/users
+Content-Type: application/json
+
+{
+  "name": "student2",
+  "email": "student2@iiit.ac.in",
+  "password": "123456",
+  "confPassword" : "123456",
+  "role": "user"
+}
+
+#########
+
+//get All users
+GET http://localhost:5000/users
+####
+// GET single User
+GET http://localhost:5000/users/70d98adf-263b-422d-9d62-070b11675478
+
+###
+//update a user
+PATCH http://localhost:5000/users/a3f28973-7840-4e5b-b99d-2f613f517db2
+Content-Type: application/json
+
+{
+  "name": "student2 updated",
+  "email": "student2@iiit.ac.in",
+  "password": "",
+  "confPassword" : "",
+  "role": "user"
+}
+
+####
+//delete user
+DELETE http://localhost:5000/users/70d98adf-263b-422d-9d62-070b11675478
+
+######
+//Login user --endpoint is login
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+  "email": "student2@iiit.ac.in",
+  "password": "123456"
+}
+
+######
+//login --endpoint is login
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+  "email": "admin@iiit.ac.in",
+  "password": "123456"
+}
+
+######
+//login --endpoint is login
+GET http://localhost:5000/me
+
+######
+//logout --endpoint is logout
+DELETE http://localhost:5000/logout
+
+#########################################################################
+####
+//get all tasks
+GET http://localhost:5000/tasks
+
+######
+//get single task
+GET http://localhost:5000/tasks/78572f0f-f9d3-43d8-bc6a-2bca416fd1c6
+
+
+###
+//Post data task
+POST http://localhost:5000/tasks
+Content-Type: application/json
+
+{
+  "name": "subtask",
+  "taskType": "Project"
+}
+
+
