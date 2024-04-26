@@ -1,3 +1,122 @@
 @startuml
+class Student {
+ +studentID:String
+ +studentName:String
+ +program:String
+ +milestones: Object<Array>
+ +vivareq: VivaRequest
+}
 
+class VivaRequest{
+    +isRejected:boolean
+    +VivaRequest()
+}
+
+interface ApprovalHandler {
+ +ApprovalRequest(VivaRequest vivareq):boolean
+}
+
+class AcademicAdminHandler implements ApprovalHandler {
+   - nextHandler:ApprovalHandler
+  +ApprovalRequest(VivaRequest vivareq):boolean
+}
+
+class AdvisorHandler implements ApprovalHandler {
+   - nextHandler:ApprovalHandler
+  +ApprovalRequest(VivaRequest vivareq):boolean
+}
+
+Student -right-> ApprovalHandler : initiate comprehensive viva request
+VivaRequest -up-> Student
+ApprovalHandler --> ApprovalHandler:successor
 @enduml
+
+@startuml
+
+class UserManager {}
+class BrokerService {}
+
+
+interface dataExchange{
+ + getData()
+ + setData(data)
+}
+
+class IMSAdapter implements dataExchange{
+- adaptee: IMSService
++ getData()
++ setData(data)
+}
+
+class MoodleAdapter implements dataExchange{
+- adaptee: MoodleService
++ getData()
++ setData(data)
+}
+
+class IMSService{
++ getGrades()
++ getApplicationStatus()
+}
+class MoodleService{
++ getAssignments()
++ getCourses()
+}
+
+UserManager <--> BrokerService
+BrokerService --> IMSAdapter
+BrokerService --> MoodleAdapter
+IMSService <-up- IMSAdapter
+MoodleService <-up- MoodleAdapter
+@enduml
+
+
+@startuml
+
+package "Tracker" {
+ TrackerService --|> DBObject
+}
+
+class User-Student{
+  +event : Event
+  }
+  class Event{
+  + events :TrackerService
+  +     Event()
+    +CompleteStage()
+      +CompleteMilestone()
+  }
+  Event <-up- "User-Student":trigger Event
+
+ Event -down-> TrackerService: Event update
+
+ package "NotificationManager" {
+  class Observer {
+    -observers : List<Observer>
+    +Attach(Observer)
+    +Detach(Observer)
+    +Notify(event, data)
+  }
+ }
+ Observer *-- Subscriber:subscribe
+ interface Subscriber{
+ +update(Event)
+ }
+   class AcadAdmin implements Subscriber {
+     -acadAdminStatus : String
+     +Update(Event)
+   }
+
+   class Advisor implements Subscriber {
+     -advisorStatus : String
+     +Update(Event)
+   }
+
+ Tracker -->"NotificationManager": Notify
+ note "Notify(observers, event): for all o in observers{ o->Update() }" as N1
+ note "Update() : ObserverState = Event -->GetStatus()" as N2
+ N1 .. Observer
+ AcadAdmin ..N2
+ N2 .. Advisor
+@enduml
+
